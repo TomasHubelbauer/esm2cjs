@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "node .",
+    "test": "node test"
+  }
+}
