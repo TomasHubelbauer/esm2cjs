@@ -1,0 +1,17 @@
+name: github-actions
+on:
+  push:
+    branches:
+    # Limit to the `master` branch
+    - master
+jobs:
+  github-actions:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run the test
+      run: |
+        npm test
+        if (-not $?) {
+          throw "Failed to run npm test"
+        }

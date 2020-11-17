@@ -1,4 +1,9 @@
 {
+  "name": "esm2cjs",
+  "version": "0.0.0",
+  "license": "AGPL-3.0-only",
+  "repository": "tomashubelbauer/esm2cjs",
+  "bin": "index.js",
   "type": "module",
   "scripts": {
     "start": "node .",

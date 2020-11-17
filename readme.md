@@ -1,5 +1,7 @@
 # ESM2CJS
 
+[![](https://github.com/tomashubelbauer/esm2cjs/workflows/github-actions/badge.svg)](https://github.com/TomasHubelbauer/esm2cjs/actions)
+
 A utlity for replacing `import/export` ESM syntax with `require` calls for the
 few stone-age tools that still don't support ESM in 2020.
 
@@ -14,7 +16,8 @@ few stone-age tools that still don't support ESM in 2020.
 
 ## Development
 
-`npm test` to run on the `test` directory.
+- `npm test` to run on the `test` directory
+- 1`npm .` to test application invocation
 
 ### To-Do
 
@@ -26,5 +29,3 @@ Use [`todo`](https://github.com/tomashubelbauer/todo).
 
 https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export
 https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/import
-
-#### Make this into an executable like `todo` and use in MarkRight CI/CD
