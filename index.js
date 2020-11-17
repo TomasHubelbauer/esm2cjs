@@ -14,6 +14,7 @@ export default async function esm2cjs(directoryPath = '.') {
       }
 
       await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2));
+      console.log('Demodulated', filePath);
       continue;
     }
 
