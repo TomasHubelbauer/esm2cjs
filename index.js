@@ -23,13 +23,39 @@ export default async function esm2cjs(directoryPath = '.') {
 
     // TODO: Skip binary files by text/blob detection or CLI ignore list or both
     const text = await fs.promises.readFile(filePath, 'utf-8');
-    const lines = text.split('\n');
+    const lines = text.split(/\r?\n/g);
     for (let index = 0; index < lines.length; index++) {
-      // TODO: Preserve the leading whitespace in lines
-      const line = lines[index].trim();
+      // TODO: Support affecting multiple different changes within a single line
+      const line = lines[index];
 
-      if (line.startsWith('export default')) {
-        lines[index] = 'module.exports =' + line.slice('export default'.length);
+      // Convert `import dep from 'dep';` into `const dep = require('dep');`
+      const importFromMatch = line.match(/^import (?<_import>.*?) from (?<_from>.*?);?$/);
+      if (importFromMatch) {
+        const { _import, _from } = importFromMatch.groups;
+        lines[index] = `const ${_import} = require(${_from});`;
+        continue;
+      }
+
+      // Convert `const { default: dep } = await import('dep?' + cachebuster);` into `const dep = require('dep');`
+      const constDefaultAwaitImportMatch = line.match(/^(?<space>\s*)const \{ default: (?<_default>.*?) \} = await import\((?<_import>('|").*?\?('|")).*?\);?$/);
+      if (constDefaultAwaitImportMatch) {
+        const { space, _default, _import } = constDefaultAwaitImportMatch.groups;
+        lines[index] = `${space}const ${_default} = require(${_import.replace('?', '')});`;
+        continue;
+      }
+
+      // Replace instances of `import.meta.url` with `'file:///' + __filename`
+      const importMetaUrlRegex = /import.meta.url/g;
+      let importMetaUrlMatch;
+      while (importMetaUrlMatch = importMetaUrlRegex.exec(lines[index])) {
+        lines[index] = `${lines[index].slice(0, importMetaUrlMatch.index)}'file:///' + __filename${lines[index].slice(importMetaUrlMatch.index + importMetaUrlMatch[0].length)}`;
+      }
+
+      // Convert `export default` into `module.exports =`
+      const exportDefaultRegex = line.match(/^export default /);
+      if (exportDefaultRegex) {
+        lines[index] = 'module.exports = ' + line.slice(exportDefaultRegex[0].length);
+        continue;
       }
     }
 

@@ -18,14 +18,18 @@ void async function () {
 
   // Ensure the `test` directory runs fine with no runtime errors
   const test = await util.promisify(child_process.exec)('node test/index.js');
-  if (test.stderr === '') {
-    console.log('Ensured the `test` directory program runs without errors');
+  if (test.stderr) {
+    throw new Error('`test` ran into an error');
   }
 
   // Ensure the `expected` directory runs with zero exit code with `node .`
   const expected = await util.promisify(child_process.exec)('node expected');
-  if (expected.stderr === '') {
-    console.log('Ensured the `expected` directory program runs without errors');
+  if (expected.stderr) {
+    throw new Error('`expected` ran into an error');
+  }
+
+  if (expected.stdout !== test.stdout) {
+    throw new Error('Expected stdout did not match test stdout.');
   }
 
   // Create the `actual` directory and copy `test` directory files into it
@@ -53,8 +57,12 @@ void async function () {
 
   // Ensure the `actual` directory runs with zero exit code with `node .`
   const actual = await util.promisify(child_process.exec)('node actual');
-  if (actual.stderr === '') {
-    console.log('Ensured the `actual` directory program runs without errors');
+  if (actual.stderr) {
+    throw new Error('`actual` ran into an error');
+  }
+
+  if (actual.stdout !== expected.stdout) {
+    throw new Error('Actual stdout did not match expected stdout.');
   }
 
   // Remove the `actual` directory to leave the state clean for the next run

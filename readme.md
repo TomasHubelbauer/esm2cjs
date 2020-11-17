@@ -27,6 +27,4 @@ Use [`todo`](https://github.com/tomashubelbauer/todo).
 https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export
 https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/import
 
-#### Support the transformations needed for MarkRight and use this there
-
 #### Make this into an executable like `todo` and use in MarkRight CI/CD
