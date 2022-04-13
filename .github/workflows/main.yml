@@ -1,13 +1,11 @@
-name: github-actions
-on:
-  push:
-    branches:
-    # Limit to the `master` branch
-    - master
+name: main
+on: push
+
 jobs:
-  github-actions:
+  main:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - name: Check out the main branch
+      uses: actions/checkout@v3
     - name: Run the test
       run: npm test
