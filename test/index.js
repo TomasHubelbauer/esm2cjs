@@ -4,7 +4,7 @@ import dep from './dep.js';
 
 void async function () {
   const url = import.meta.url;
-  const filePath = url.slice('file:///'.length);
+  const filePath = url.slice('file://'.length);
   const baseName = path.basename(filePath);
   const dirName = path.normalize(path.dirname(path.dirname(filePath)));
   const tempName = path.normalize(os.tmpdir());

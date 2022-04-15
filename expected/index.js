@@ -3,8 +3,8 @@ const path = require('path');
 const dep = require('./dep.js');
 
 void async function () {
-  const url = 'file:///' + __filename;
-  const filePath = url.slice('file:///'.length);
+  const url = 'file://' + __filename;
+  const filePath = url.slice('file://'.length);
   const baseName = path.basename(filePath);
   const dirName = path.normalize(path.dirname(path.dirname(filePath)));
   const tempName = path.normalize(os.tmpdir());

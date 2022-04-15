@@ -49,7 +49,7 @@ export default async function esm2cjs(directoryPath = '.') {
       const importMetaUrlRegex = /import.meta.url/g;
       let importMetaUrlMatch;
       while (importMetaUrlMatch = importMetaUrlRegex.exec(lines[index])) {
-        lines[index] = `${lines[index].slice(0, importMetaUrlMatch.index)}'file:///' + __filename${lines[index].slice(importMetaUrlMatch.index + importMetaUrlMatch[0].length)}`;
+        lines[index] = `${lines[index].slice(0, importMetaUrlMatch.index)}'file://' + __filename${lines[index].slice(importMetaUrlMatch.index + importMetaUrlMatch[0].length)}`;
       }
 
       // Convert `export default` into `module.exports =`
@@ -65,19 +65,6 @@ export default async function esm2cjs(directoryPath = '.') {
   }
 }
 
-// TODO: Extract out to a `node-cli-call` module for reuse - related: https://stackoverflow.com/a/60309682/2715716
-void async function () {
-  const url = import.meta.url;
-  const argv1 = process.argv[1];
-
-  // Uncomment these values to test whether calling as an executable works
-  // const url = 'file:///C:/Users/TomasHubelbauer/AppData/Roaming/npm-cache/_npx/14128/node_modules/todo/index.js';
-  // const argv1 = 'C:\\Users\\TomasHubelbauer\\AppData\\Roaming\\npm-cache\\_npx\\14128\\node_modules\\todo\\index.js';
-
-  const normalizedFileName = path.normalize(url.slice('file:///'.length));
-  const normalizedDirectoryName = path.dirname(normalizedFileName);
-
-  if (normalizedDirectoryName === argv1 || normalizedFileName === argv1) {
-    await esm2cjs(process.argv[2]);
-  }
-}()
+if (import.meta.url.endsWith(process.argv[1])) {
+  await esm2cjs(process.argv[2]);
+}
